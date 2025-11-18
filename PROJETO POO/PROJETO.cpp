@@ -22,6 +22,8 @@ public:
 	}
 };
 
+
+
 class Guerreiro : public Personagem {
 public:
 	
@@ -83,12 +85,21 @@ public:
 };
 
 class Inimigo : public Personagem {
-public: 
-
-	std::string tipo;
+public:
+	string tipo;
 	int recompensaXP;
 
+	Inimigo(string n, string t, int pv, int f, int d, int xp)
+		: Personagem(n, pv, f, d), tipo(t), recompensaXP(xp) {
+	}
+
+	/*void atacar(Personagem& alvo) override {
+		int dano = calcularDano(alvo);
+		cout << nome << " (" << tipo << ") atacou causando " << dano << " de dano!\n";
+		alvo.pontosVida -= dano;
+	}*/
 };
+
 
 class Batalha {
 public:
