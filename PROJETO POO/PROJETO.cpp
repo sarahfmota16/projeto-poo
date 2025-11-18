@@ -14,7 +14,7 @@ public:
 
 	Personagem(string n, int pv, int f, int d) : nome(n), pontosVida(pv), forca(f), defesa(d) {}
 
-	virtual void atacar(Personagem&, alvo) = 0;
+	virtual int atacar(Personagem& alvo) = 0;
 
 	virtual void calcularDano(int dano){
 		pontosVida -= dano;
@@ -31,17 +31,18 @@ public:
 
 	Guerreiro(string n, int pv, int f, int d, int re) : Personagem(n, pv, f, d), resistenciaEscudo(re) {}
 	
-	void atacar(Personagem&, alvo) override {
+	int atacar(Personagem& alvo) override {
 		int dano = forca - alvo.defesa;
 		if (dano < 0) dano = 0;
-		alvo.calcularDano();
-		return dano;
 
+		alvo.calcularDano(dano);
+		return dano;
 	}
 
 	void calcularDano(int dano) override {
 		int danoGuerreiro = dano - resistenciaEscudo;
 		if (danoGuerreiro < 0) danoGuerreiro = 0;
+
 		pontosVida -= danoGuerreiro;
 		if (pontosVida < 0) pontosVida = 0;
 	}
@@ -49,40 +50,47 @@ public:
 
 class Mago : public Personagem {
 public:
-
 	int pontosMagia;
 
-	Mago(string n, int pv, int f, int d, int mp) : Personagem(n, pv, f, d), pontosMagia(mp) {}
+	Mago(string n, int pv, int f, int d, int mp)
+		: Personagem(n, pv, f, d), pontosMagia(mp) {
+	}
 
-	void atacar(Personagem&, alvo) override {
-		int dano = (forca + (pontosMagia/2)) - alvo.defesa;
+	int atacar(Personagem& alvo) override {
+		int dano = (forca + (pontosMagia / 2)) - alvo.defesa;
 		if (dano < 0) dano = 0;
-		alvo.calcularDano();
+
+		alvo.calcularDano(dano);
 		return dano;
 	}
 };
 
-class Arqueiro: public Personagem {
-public:
 
+class Arqueiro : public Personagem {
+public:
 	int agilidade;
 
-	Arqueiro(string n, int pv, int f, int d, int a) : Personagem(n, pv, f, d), agilidade(a) {}
+	Arqueiro(string n, int pv, int f, int d, int a)
+		: Personagem(n, pv, f, d), agilidade(a) {
+	}
 
-	void atacar(Personagem&, alvo) override {
+	int atacar(Personagem& alvo) override {
 		int dano = (forca + agilidade) - alvo.defesa;
 		if (dano < 0) dano = 0;
-		alvo.calcularDano();
+
+		alvo.calcularDano(dano);
 		return dano;
 	}
 
 	void calcularDano(int dano) override {
-		int danoArqueiro = dano - (agilidade/2);
+		int danoArqueiro = dano - (agilidade / 2);
 		if (danoArqueiro < 0) danoArqueiro = 0;
+
 		pontosVida -= danoArqueiro;
 		if (pontosVida < 0) pontosVida = 0;
 	}
 };
+
 
 class Inimigo : public Personagem {
 public:
@@ -93,12 +101,15 @@ public:
 		: Personagem(n, pv, f, d), tipo(t), recompensaXP(xp) {
 	}
 
-	/*void atacar(Personagem& alvo) override {
-		int dano = calcularDano(alvo);
-		cout << nome << " (" << tipo << ") atacou causando " << dano << " de dano!\n";
-		alvo.pontosVida -= dano;
-	}*/
+	int atacar(Personagem& alvo) override {
+		int dano = forca - alvo.defesa;
+		if (dano < 0) dano = 0;
+
+		alvo.calcularDano(dano);
+		return dano;
+	}
 };
+
 
 
 class Batalha {
