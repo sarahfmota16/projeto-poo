@@ -20,6 +20,15 @@ public:
 		pontosVida -= dano;
 		if (pontosVida < 0) pontosVida = 0;
 	}
+
+	void mostrarStatus(Personagem& p) {
+		cout << "=== Status de " << p.nome << " ===\n";
+		cout << "Vida: " << p.pontosVida << "\n";
+		cout << "Força: " << p.forca << "\n";
+		cout << "Defesa: " << p.defesa << "\n";
+		cout << "-----------------------------\n";
+	}
+
 };
 
 
@@ -131,5 +140,14 @@ public:
 
 class Jogo {
 public:
+	void iniciar() {
+		cout << "Bem-vindo ao RPG!\n";
 
+	}
 };
+
+
+int main() {
+
+	return 0;
+}
