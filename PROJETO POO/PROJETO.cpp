@@ -12,9 +12,9 @@ public:
 	int defesa;
 	std::vector<std::string> habilidades;
 
-	virtual void atacar() {
+	Personagem(string n, int pv, int f, int d) : nome(n), pontosVida(pv), forca(f), defesa(d){}
 
-	}
+	virtual void atacar(Personagem&, alvo) = 0;
 
 	void calcularDano() {
 
@@ -23,7 +23,9 @@ public:
 
 class Guerreiro : public Personagem {
 public:
-
+	
+	int resistenciaEscudo;
+	
 	void atacar() override {
 
 	}
@@ -32,6 +34,8 @@ public:
 class Mago : public Personagem {
 public:
 
+	int pontosMagia;
+
 	void atacar() override {
 
 	}
@@ -39,6 +43,8 @@ public:
 
 class Arqueiro: public Personagem {
 public:
+
+	int destreza;
 
 	void atacar() override {
 
@@ -56,7 +62,7 @@ public:
 class Batalha {
 public:
 
-	void determinarordem() {
+	void ordenarEvento() {
 
 	}
 };
