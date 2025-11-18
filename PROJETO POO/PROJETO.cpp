@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <string>
 #include <vector>
+#include <string>
+#include <map>
 
 using namespace std;
 
@@ -12,7 +14,7 @@ public:
 	int defesa;
 	std::vector<std::string> habilidades;
 
-	//Conteudo extra a)Sistema de nível
+	//EXTRA A)Sistema de nível
 	int nivel = 1;
 	int xp = 0;
 	int xpParaProximoNivel = 100;
@@ -25,6 +27,19 @@ public:
 		pontosVida -= dano;
 		if (pontosVida < 0) pontosVida = 0;
 	}
+
+	// EXTRA B) Sistema de Defesa Aprimorado:
+	// Implementa uma redução proporcional de dano baseada no atributo DEFESA.
+	// Quanto maior a defesa do alvo, menor será o dano recebido, evitando resultados
+	// extremos como dano zero constante ou defesa inútil. Torna o combate mais equilibrado.
+	int reduzirDanoPelaDefesa(int danoBase) {
+		float multiplicador = 100.0f / (100.0f + defesa);
+		int danoFinal = danoBase * multiplicador;
+
+		if (danoFinal < 0) danoFinal = 0;
+		return danoFinal;
+	}
+
 
 	void ganharXP(int xpRecebido) {
 		if (xpRecebido <= 0) return;
@@ -72,12 +87,13 @@ public:
 	Guerreiro(string n, int pv, int f, int d, int re) : Personagem(n, pv, f, d), resistenciaEscudo(re) {}
 
 	int atacar(Personagem& alvo) override {
-		int dano = forca - alvo.defesa;
-		if (dano < 0) dano = 0;
+		int danoBase = forca;
+		int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
 
-		alvo.calcularDano(dano);
-		return dano;
+		alvo.calcularDano(danoFinal);
+		return danoFinal;
 	}
+
 
 	void calcularDano(int dano) override {
 		int danoGuerreiro = dano - resistenciaEscudo;
@@ -107,12 +123,12 @@ public:
 	}
 
 	int atacar(Personagem& alvo) override {
-		int dano = (forca + (pontosMagia / 2)) - alvo.defesa;
-		if (dano < 0) dano = 0;
-
-		alvo.calcularDano(dano);
-		return dano;
+		int danoBase = forca + (pontosMagia / 2);
+		int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
+		alvo.calcularDano(danoFinal);
+		return danoFinal;
 	}
+
 
 	void subirNivel() override {
 		int ganhoPV = 8;
@@ -136,12 +152,12 @@ public:
 	}
 
 	int atacar(Personagem& alvo) override {
-		int dano = (forca + agilidade) - alvo.defesa;
-		if (dano < 0) dano = 0;
-
-		alvo.calcularDano(dano);
-		return dano;
+		int danoBase = forca + agilidade;
+		int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
+		alvo.calcularDano(danoFinal);
+		return danoFinal;
 	}
+
 
 	void calcularDano(int dano) override {
 		int danoArqueiro = dano - (agilidade / 2);
@@ -174,12 +190,12 @@ public:
 	}
 
 	int atacar(Personagem& alvo) override {
-		int dano = forca - alvo.defesa;
-		if (dano < 0) dano = 0;
-
-		alvo.calcularDano(dano);
-		return dano;
+		int danoBase = forca;
+		int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
+		alvo.calcularDano(danoFinal);
+		return danoFinal;
 	}
+
 };
 
 
@@ -192,14 +208,76 @@ public:
 	}
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extern const std::map<std::string, std::map<std::string, float>> TIPO_EFETIVIDADE;
+
 class Habilidade {
 public:
+	std::string Nome;
+	std::string Tipo;
+	int DanoBase;
 
-	std::string nome;
-	std::string tipo;
-	int danoBase;
-
+	Habilidade(std::string n, std::string t, int d);
+	float obterMultiplicador(const std::string& tipoAlvo) const;
 };
+
+const std::map<std::string, std::map<std::string, float>> TIPO_EFETIVIDADE = {
+	{"Fogo",     {{"Gelo", 2.0f},  {"Terra", 2.0f},  {"Água", 0.5f}}},
+	{"Água",     {{"Fogo", 2.0f},  {"Terra", 2.0f},  {"Elétrico", 0.5f}, {"Gelo", 0.5f}}},
+	{"Elétrico", {{"Água", 2.0f},  {"Terra", 0.5f}}},
+	{"Gelo",     {{"Terra", 2.0f}, {"Fogo", 2.0f},   {"Água", 0.5f}}},
+	{"Terra",    {{"Elétrico", 2.0f}, {"Água", 0.5f}, {"Gelo", 0.5f}}},
+	{"Neutro",   {}}
+};
+
+Habilidade::Habilidade(std::string n, std::string t, int d)
+	: Nome(n), Tipo(t), DanoBase(d) {
+}
+
+float Habilidade::obterMultiplicador(const std::string& tipoAlvo) const {
+	auto it_ataque = TIPO_EFETIVIDADE.find(Tipo);
+	if (it_ataque != TIPO_EFETIVIDADE.end()) {
+		auto it_alvo = it_ataque->second.find(tipoAlvo);
+		if (it_alvo != it_ataque->second.end()) {
+			return it_alvo->second;
+		}
+	}
+	return 1.0f;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Jogo {
 public:
