@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <vector>
 
@@ -12,19 +12,50 @@ public:
 	int defesa;
 	std::vector<std::string> habilidades;
 
+	//Conteudo extra a)Sistema de nível
+	int nivel = 1;
+	int xp = 0;
+	int xpParaProximoNivel = 100;
+
 	Personagem(string n, int pv, int f, int d) : nome(n), pontosVida(pv), forca(f), defesa(d) {}
 
 	virtual int atacar(Personagem& alvo) = 0;
 
-	virtual void calcularDano(int dano){
+	virtual void calcularDano(int dano) {
 		pontosVida -= dano;
 		if (pontosVida < 0) pontosVida = 0;
 	}
 
+	void ganharXP(int xpRecebido) {
+		if (xpRecebido <= 0) return;
+		xp += xpRecebido;
+		cout << nome << " ganhou " << xpRecebido << " XP!\n";
+		while (xp >= xpParaProximoNivel) {
+			xp -= xpParaProximoNivel;
+			nivel++;
+			xpParaProximoNivel = nivel * 100; 
+			subirNivel();
+		}
+		cout << nome << " agora tem " << xp << " XP (precisa de " << xpParaProximoNivel << " para o proximo nivel).\n";
+	}
+
+	virtual void subirNivel() {
+		int ganhoPV = 10;
+		int ganhoForca = 2;
+		int ganhoDefesa = 1;
+
+		pontosVida += ganhoPV; 
+		forca += ganhoForca;
+		defesa += ganhoDefesa;
+
+		cout << nome << " subiu para o nivel " << nivel << "! (PV +" << ganhoPV << ", Foraa +" << ganhoForca << ", Defesa +" << ganhoDefesa << ")\n";
+	}
+
 	void mostrarStatus(Personagem& p) {
 		cout << "=== Status de " << p.nome << " ===\n";
+		cout << "Nivel: " << nivel << "  XP: " << xp << "/" << xpParaProximoNivel << "\n";
 		cout << "Vida: " << p.pontosVida << "\n";
-		cout << "For�a: " << p.forca << "\n";
+		cout << "Forca: " << p.forca << "\n";
 		cout << "Defesa: " << p.defesa << "\n";
 		cout << "-----------------------------\n";
 	}
@@ -35,11 +66,11 @@ public:
 
 class Guerreiro : public Personagem {
 public:
-	
+
 	int resistenciaEscudo;
 
 	Guerreiro(string n, int pv, int f, int d, int re) : Personagem(n, pv, f, d), resistenciaEscudo(re) {}
-	
+
 	int atacar(Personagem& alvo) override {
 		int dano = forca - alvo.defesa;
 		if (dano < 0) dano = 0;
@@ -54,6 +85,16 @@ public:
 
 		pontosVida -= danoGuerreiro;
 		if (pontosVida < 0) pontosVida = 0;
+	}
+
+	void subirNivel() override {
+		int ganhoPV = 12;
+		int ganhoForca = 3;
+		int ganhoDefesa = 1;
+		pontosVida += ganhoPV;
+		forca += ganhoForca;
+		defesa += ganhoDefesa;
+		cout << nome << " (Guerreiro) subiu para o nivel " << nivel << "! (PV +" << ganhoPV << ", Forca +" << ganhoForca << ")\n";
 	}
 };
 
@@ -71,6 +112,17 @@ public:
 
 		alvo.calcularDano(dano);
 		return dano;
+	}
+
+	void subirNivel() override {
+		int ganhoPV = 8;
+		int ganhoForca = 1;
+		int ganhoDefesa = 1;
+		pontosVida += ganhoPV;
+		forca += ganhoForca;
+		defesa += ganhoDefesa;
+		pontosMagia += 10;
+		cout << nome << " (Mago) subiu para o nivel " << nivel << "! (PV +" << ganhoPV << ", PM +10)\n";
 	}
 };
 
@@ -97,6 +149,17 @@ public:
 
 		pontosVida -= danoArqueiro;
 		if (pontosVida < 0) pontosVida = 0;
+	}
+
+	void subirNivel() override {
+		int ganhoPV = 9;
+		int ganhoForca = 2;
+		int ganhoDefesa = 1;
+		agilidade += 2;
+		pontosVida += ganhoPV;
+		forca += ganhoForca;
+		defesa += ganhoDefesa;
+		cout << nome << " (Arqueiro) subiu para o nivel " << nivel << "! (PV +" << ganhoPV << ", Agilidade +2)\n";
 	}
 };
 
@@ -148,6 +211,16 @@ public:
 
 
 int main() {
+	Guerreiro g("Arthur", 100, 20, 10, 5);
+
+	g.mostrarStatus(g);
+
+	cout << "---- Ganho de XP ----\n";
+	g.ganharXP(50);
+	g.ganharXP(80);  
+	g.ganharXP(150);
+
+	g.mostrarStatus(g);
 
 	return 0;
 }
