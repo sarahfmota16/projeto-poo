@@ -10,7 +10,7 @@ int main() {
     cout << "      RPG DE TERMINAL        \n";
     cout << "==============================\n\n";
 
-    jogo.iniciar();   // inicia o jogo
+    jogo.iniciar();  
 
     cout << "\nPrograma finalizado.\n";
     return 0;

@@ -30,7 +30,6 @@ public:
     Personagem(string n, int pv, int f, int d, string el = "Neutro");
     virtual ~Personagem() {}
 
-    // Getters e Setters básicos
     string getNome() const { return nome; }
     string getElemento() const { return elementoNato; }
     int getPV() const { return pontosVida; }
