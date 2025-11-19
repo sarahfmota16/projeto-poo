@@ -35,10 +35,8 @@ bool Batalha::iniciarCombate(Personagem& heroi, Inimigo& inimigo) {
 
         // MENU
         cout << CYAN << "\n---------- SUA VEZ ----------\n" << RESET;
-        cout << "1. " << GREEN << "Atacar" << RESET << "\n";
-        cout << "2. " << YELLOW << "Defender" << RESET << "\n";
-        cout << "3. " << RED << "Fugir" << RESET << "\n";
-        cout << CYAN << "Escolha: " << RESET;
+        cout << "1. Atacar\n2. Defender\n3. Fugir\n4. Usar habilidade\nEscolha: ";
+
 
         int escolha;
         cin >> escolha;
@@ -58,6 +56,34 @@ bool Batalha::iniciarCombate(Personagem& heroi, Inimigo& inimigo) {
         if (escolha == 1) {
             heroi.atacar(inimigo);
         }
+
+        if (escolha == 4) {
+            if (heroi.habilidades.empty()) {
+                cout << "\nVoce nao possui habilidades!\n";
+            }
+            else {
+                cout << "\n--- HABILIDADES DISPONIVEIS ---\n";
+
+                for (int i = 0; i < heroi.habilidades.size(); i++) {
+                    cout << i + 1 << ". " << heroi.habilidades[i].nome
+                        << " | Tipo: " << heroi.habilidades[i].tipo
+                        << " | Dano Base: " << heroi.habilidades[i].danoBase << "\n";
+                }
+
+                cout << "Escolha: ";
+                int idx;
+                cin >> idx;
+                idx--;
+
+                if (idx >= 0 && idx < heroi.habilidades.size()) {
+                    heroi.usarHabilidade(heroi.habilidades[idx], inimigo);
+                }
+                else {
+                    cout << "Escolha invalida! Perdeu a vez.\n";
+                }
+            }
+        }
+
 
         if (!inimigo.estaVivo()) break;
 

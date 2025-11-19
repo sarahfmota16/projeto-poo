@@ -68,3 +68,37 @@ void Personagem::defender() {
 void Personagem::limparDefesa() {
     estaDefendendo = false;
 }
+
+
+int Personagem::usarHabilidade(Habilidade& hab, Personagem& alvo) {
+
+    int dano = calcularDanoHabilidade(hab, alvo);
+
+    cout << "\n" << nome << " usa a habilidade **" << hab.nome
+        << "** do tipo [" << hab.tipo << "]!\n";
+    cout << "Dano base: " << hab.danoBase << "\n";
+
+    alvo.receberDano(dano);
+
+    cout << "Dano final causado: " << dano << "!\n";
+
+    return dano;
+}
+
+int Personagem::calcularDanoHabilidade(Habilidade& hab, Personagem& alvo) {
+
+    float multiplicador = hab.obterMultiplicador(alvo.getElemento());
+    int dano = hab.danoBase * multiplicador;
+
+    // Redução pela defesa do alvo
+    dano = alvo.reduzirDanoPelaDefesa(dano);
+
+    if (multiplicador > 1.0f) {
+        cout << "   É SUPER EFETIVO! (x" << multiplicador << ")\n";
+    }
+    else if (multiplicador < 1.0f) {
+        cout << "   Pouco efetivo... (x" << multiplicador << ")\n";
+    }
+
+    return dano;
+}

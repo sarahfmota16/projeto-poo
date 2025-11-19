@@ -9,34 +9,20 @@ Mago::Mago(string n, int pv, int f, int d, int mp)
     : Personagem(n, pv, f, d, "Fogo"), pontosMagia(mp) {
 }
 
+
 int Mago::atacar(Personagem& alvo) {
 
-    int danoCalculado = forca;
+    // O mago usa sua força + um pequeno bônus mágico
+    int danoBase = forca + (pontosMagia / 10);
 
-    string nomeAtaque = "Ataque Basico";
+    cout << nome << " ataca " << alvo.getNome()
+        << " com um ataque basico reforçado por magia!\n";
 
-    if (!habilidades.empty()) {
-
-        Habilidade h = habilidades[0];
-
-        float mult = h.obterMultiplicador(alvo.getElemento());
-
-        danoCalculado = (int)((forca + h.danoBase + (pontosMagia / 5)) * mult);
-
-        nomeAtaque = h.nome;
-
-        if (mult > 1.0f) cout << "(SUPER EFETIVO!) ";
-
-    }
-
-    int danoFinal = alvo.reduzirDanoPelaDefesa(danoCalculado);
-
-    cout << nome << " lança " << nomeAtaque << " em "
-        << alvo.getNome() << " causando " << danoFinal << " de dano!\n";
+    int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
 
     alvo.receberDano(danoFinal);
 
+    cout << "Dano causado: " << danoFinal << "\n";
+
     return danoFinal;
-
 }
-

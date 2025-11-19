@@ -27,6 +27,7 @@ void Jogo::iniciar() {
     cout << "1. " << GREEN << "Guerreiro" << RESET << "\n";
     cout << "2. " << MAGENTA << "Mago" << RESET << "\n";
     cout << "3. " << CYAN << "Arqueiro" << RESET << "\n";
+    cout << "4. " << RED << "Sair do jogo" << RESET << "\n";
     cout << YELLOW << "Opcao: " << RESET;
 
     int classe;
@@ -35,6 +36,12 @@ void Jogo::iniciar() {
     Personagem* jogador = nullptr;
 
     cout << "\n";
+
+    if (classe == 4) {
+        cout << RED << "\nVoce escolheu sair do jogo.\n" << RESET;
+        cout << CYAN << "Encerrando programa...\n\n" << RESET;
+        return; 
+    }
 
     if (classe == 1) {
         cout << GREEN << ">> Voce escolheu o caminho do GUERREIRO!\n\n" << RESET;
@@ -73,12 +80,18 @@ void Jogo::iniciar() {
         // Vitória — pausa antes do próximo inimigo
         if (vitoria) {
             cout << GREEN << "\n>> Voce venceu esta batalha!\n" << RESET;
-            cout << YELLOW << "Digite 1 para seguir para a proxima luta: " << RESET;
+            cout << YELLOW << "Digite 1 para seguir para a proxima luta ou (0 para sair): " << RESET;
 
             int temp;
             cin >> temp;
 
             cout << "\n";
+
+            if (temp == 0) {
+                cout << RED << "\nVoce escolheu sair do jogo.\n" << RESET;
+                cout << CYAN << "Encerrando programa...\n\n" << RESET;
+                return;
+            }
         }
     }
 

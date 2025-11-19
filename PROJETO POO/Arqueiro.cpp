@@ -1,4 +1,4 @@
-#include "Personagem.h"
+﻿#include "Personagem.h"
 #include <iostream>
 
 using namespace std;
@@ -8,18 +8,23 @@ Arqueiro::Arqueiro(string n, int pv, int f, int d, int a)
 }
 
 int Arqueiro::atacar(Personagem& alvo) {
-    int danoBase = forca + agilidade;
+
+    // bônus baseado na agilidade (tiro rápido e preciso)
+    int danoBase = forca + (agilidade / 4);
+
+    cout << nome << " dispara uma flecha rapida contra "
+        << alvo.getNome() << "!\n";
 
     if (verificarCritico()) {
-        danoBase = (int)(danoBase * 1.5);
-        cout << "(HEADSHOT!) ";
+        danoBase = (int)(danoBase * 1.8); // arqueiros critam mais forte
+        cout << "   🎯 (HEADSHOT!) Critico mortal!\n";
     }
 
     int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
 
-    cout << nome << " dispara em " << alvo.getNome()
-        << " causando " << danoFinal << " de dano!\n";
-
     alvo.receberDano(danoFinal);
+
+    cout << "Dano causado: " << danoFinal << "\n";
+
     return danoFinal;
 }

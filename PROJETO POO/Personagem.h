@@ -51,6 +51,11 @@ public:
     void defender();
     void limparDefesa();
 
+    int usarHabilidade(Habilidade& hab, Personagem& alvo);
+
+    int calcularDanoHabilidade(Habilidade& hab, Personagem& alvo);
+
+
 };
 
 class Guerreiro : public Personagem {
