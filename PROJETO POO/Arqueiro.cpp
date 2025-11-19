@@ -8,23 +8,19 @@ Arqueiro::Arqueiro(string n, int pv, int f, int d, int a)
 }
 
 int Arqueiro::atacar(Personagem& alvo) {
-
-    // bônus baseado na agilidade (tiro rápido e preciso)
-    int danoBase = forca + (agilidade / 4);
-
-    cout << nome << " dispara uma flecha rapida contra "
-        << alvo.getNome() << "!\n";
+    int danoBase = forca + agilidade;
 
     if (verificarCritico()) {
-        danoBase = (int)(danoBase * 1.8); // arqueiros critam mais forte
-        cout << "    (HEADSHOT!) Critico mortal!\n";
+        danoBase = (int)(danoBase * 1.5);
+        cout << "(CRÍTICO! HEADSHOT!) ";
     }
 
     int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
 
+    cout << nome << " dispara uma flecha em " << alvo.getNome()
+        << " causando " << danoFinal << " de dano!\n";
+
     alvo.receberDano(danoFinal);
-
-    cout << "Dano causado: " << danoFinal << "\n";
-
     return danoFinal;
 }
+
