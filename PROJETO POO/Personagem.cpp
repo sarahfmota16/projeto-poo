@@ -108,3 +108,65 @@ int Personagem::calcularDanoHabilidade(Habilidade& hab, Personagem& alvo) {
 
     return dano;
 }
+
+
+
+
+
+
+// Adiciona um novo estado ao personagem
+void Personagem::adicionarEstado(const string& nome, int turnos) {
+    estados.push_back({ nome, turnos });
+    cout << nome << " aplicado por " << turnos << " turnos!\n";
+}
+
+// Verifica se o personagem está atordoado (Stun)
+bool Personagem::estaStunado() const {
+    for (const auto& e : estados) {
+        if (e.nome == "Stun" && e.turnosRestantes > 0)
+            return true;
+    }
+    return false;
+}
+
+// Atualiza efeitos dos estados a cada turno
+void Personagem::atualizarEstados() {
+    for (auto& e : estados) {
+
+        if (e.turnosRestantes <= 0)
+            continue;
+
+        // ----- EFEITOS DOS ESTADOS -----
+
+        if (e.nome == "Poison") {
+            cout << ">> " << nome
+                << " está ENVENENADO e sofre 5 de dano!\n";
+            pontosVida -= 5;
+        }
+        else if (e.nome == "Burn") {
+            cout << ">> " << nome
+                << " está QUEIMANDO e sofre 3 de dano!\n";
+            pontosVida -= 3;
+        }
+        else if (e.nome == "Shield") {
+            cout << ">> Um ESCUDO PROTETOR envolve " << nome
+                << ". (Defesa aumentada temporariamente)\n";
+            // futuramente coloque aqui o buff
+        }
+        else if (e.nome == "Stun") {
+            // Não aplicar nada aqui — o stun só impede de agir
+            cout << ">> " << nome
+                << " segue ATORDOADO e não consegue reagir!\n";
+        }
+
+        // Reduz duração
+        e.turnosRestantes--;
+    }
+
+    // Remove estados expirados
+    estados.erase(
+        remove_if(estados.begin(), estados.end(),
+            [](const Estado& e) { return e.turnosRestantes <= 0; }),
+        estados.end()
+    );
+}

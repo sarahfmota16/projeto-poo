@@ -11,9 +11,15 @@ int Inimigo::atacar(Personagem& alvo) {
     int danoBase = forca;
 
     if (verificarCritico()) {
-        danoBase = (int)(danoBase * 1.5);
-        cout << "(CRÍTICO DO INIMIGO!) ";
+        danoBase *= 2;
+        cout << "(CRÍTICO!) Golpe atordoante!\n";
+        alvo.adicionarEstado("Stun", 1);
+
+        cout << ">> " << alvo.getNome()
+            << " foi ATORDOADO e perderá o próximo turno!\n";
+
     }
+
 
     int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
 

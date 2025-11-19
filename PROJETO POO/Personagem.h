@@ -6,7 +6,13 @@
 #include <vector>
 #include "Habilidade.h"
 
+
 using namespace std;
+
+struct Estado {
+    string nome;          // "Poison", "Burn", "Stun", "Shield"
+    int turnosRestantes;  // Quantos turnos ainda dura
+};
 
 class Personagem {
 protected:
@@ -23,6 +29,9 @@ protected:
     int xpParaProximoNivel;
 
     bool estaDefendendo;
+
+    vector<Estado> estados; // Lista de estados ativos
+
 
 public:
     vector<Habilidade> habilidades;
@@ -54,6 +63,11 @@ public:
     int usarHabilidade(Habilidade& hab, Personagem& alvo);
 
     int calcularDanoHabilidade(Habilidade& hab, Personagem& alvo);
+
+    // ---- Métodos do Sistema de Estados ---- EXTRA D
+    void adicionarEstado(const std::string& nome, int turnos);
+    void atualizarEstados(); // chamado no início de cada turno
+    bool estaStunado() const;
 
 
 };

@@ -21,6 +21,26 @@ bool Batalha::iniciarCombate(Personagem& heroi, Inimigo& inimigo) {
 
     while (heroi.estaVivo() && inimigo.estaVivo()) {
 
+        // ============================================================
+        // ➤ EXTRA D – Estados: aplicar veneno, queimadura etc no turno
+        // ============================================================
+        heroi.atualizarEstados();
+        inimigo.atualizarEstados();
+
+        // Se o herói está atordoado, ele perde turno
+        if (heroi.estaStunado()) {
+            cout << YELLOW << "\n " << heroi.getNome() << " esta atordoado e perdeu o turno!\n" << RESET;
+
+            // Inimigo faz o turno sozinho
+            cout << RED << "\n-------------[ VEZ DO INIMIGO ]-------------\n" << RESET;
+            inimigo.atacar(heroi);
+
+            rodada++;
+            continue; // Volta para o começo do while (próxima rodada)
+        }
+
+        // ============================================================
+
         cout << YELLOW << "\n---------------[ RODADA " << rodada << " ]---------------\n" << RESET;
 
         // Status do herói
@@ -48,12 +68,18 @@ bool Batalha::iniciarCombate(Personagem& heroi, Inimigo& inimigo) {
         }
 
         if (escolha == 2) {
-            cout << YELLOW << "[Você adotou postura defensiva!]\n" << RESET;
+            cout << YELLOW << "[Voce adotou postura defensiva!]\n" << RESET;
             heroi.defender();
         }
 
         if (escolha == 1) {
             heroi.atacar(inimigo);
+
+            // EXEMPLO: 20% de chance de aplicar Poison ao inimigo
+            if (rand() % 100 < 20) {
+                cout << YELLOW << ">> O inimigo foi ENVENENADO!\n" << RESET;
+                inimigo.adicionarEstado("Poison", 3);
+            }
         }
 
         if (escolha == 4) {
@@ -76,6 +102,12 @@ bool Batalha::iniciarCombate(Personagem& heroi, Inimigo& inimigo) {
 
                 if (idx >= 0 && idx < heroi.habilidades.size()) {
                     heroi.usarHabilidade(heroi.habilidades[idx], inimigo);
+
+                    // EXEMPLO: habilidades aplicam Burn
+                    if (rand() % 100 < 25) {
+                        cout << YELLOW << ">> O inimigo sofreu QUEIMADURA!\n" << RESET;
+                        inimigo.adicionarEstado("Burn", 2);
+                    }
                 }
                 else {
                     cout << "Escolha invalida! Perdeu a vez.\n";
@@ -87,8 +119,19 @@ bool Batalha::iniciarCombate(Personagem& heroi, Inimigo& inimigo) {
         if (!inimigo.estaVivo()) break;
 
         // Turno do inimigo
+        if (inimigo.estaStunado()) {
+            cout << RED << "\n " << inimigo.getNome() << " está atordoado e perdeu o turno!\n" << RESET;
+            rodada++;
+            continue;
+        }
+
         cout << RED << "\n-------------[ VEZ DO INIMIGO ]-------------\n" << RESET;
         inimigo.atacar(heroi);
+
+        if (rand() % 100 < 10) {
+            cout << YELLOW << ">> Você foi ATORDOADO e perderá o próximo turno!\n" << RESET;
+            heroi.adicionarEstado("Stun", 1);
+        }
 
         if (!heroi.estaVivo()) break;
 
