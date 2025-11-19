@@ -14,7 +14,7 @@ int Guerreiro::atacar(Personagem& alvo) {
 
     if (verificarCritico()) {
         danoBase = (int)(danoBase * 1.5);
-        cout << "(CRÍTICO DE ESPADA!) ";
+        cout << "(CRITICO DE ESPADA!) ";
     }
 
     int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);

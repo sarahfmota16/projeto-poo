@@ -100,7 +100,7 @@ int Personagem::calcularDanoHabilidade(Habilidade& hab, Personagem& alvo) {
     dano = alvo.reduzirDanoPelaDefesa(dano);
 
     if (multiplicador > 1.0f) {
-        cout << "   É SUPER EFETIVO! (x" << multiplicador << ")\n";
+        cout << "   E SUPER EFETIVO! (x" << multiplicador << ")\n";
     }
     else if (multiplicador < 1.0f) {
         cout << "   Pouco efetivo... (x" << multiplicador << ")\n";
