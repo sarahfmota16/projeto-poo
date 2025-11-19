@@ -10,25 +10,19 @@ Guerreiro::Guerreiro(string n, int pv, int f, int d, int re)
 }
 
 int Guerreiro::atacar(Personagem& alvo) {
+    int danoBase = forca + resistenciaEscudo * 0.5; // bônus do escudo
 
-    // Guerreiro recebe um pequeno bônus baseado no escudo
-    int danoBase = forca + (resistenciaEscudo / 8);
-
-    cout << nome << " ataca " << alvo.getNome()
-        << " com um golpe poderoso!\n";
-
-    // chance de crítico
     if (verificarCritico()) {
         danoBase = (int)(danoBase * 1.5);
-        cout << "   ⚔️  (CRITICO!) Golpe devastador!\n";
+        cout << "(CRÍTICO DE ESPADA!) ";
     }
 
     int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
 
+    cout << nome << " golpeia " << alvo.getNome()
+        << " causando " << danoFinal << " de dano!\n";
+
     alvo.receberDano(danoFinal);
-
-    cout << "Dano causado: " << danoFinal << "\n";
-
     return danoFinal;
 }
 

@@ -2,7 +2,7 @@
 #include <cstdlib> // Para rand()
 
 Personagem::Personagem(string n, int pv, int f, int d, string el)
-    : nome(n), pontosVida(pv), pontosVidaMax(pv), forca(f), defesa(d), elementoNato(el), nivel(1), xp(0), xpParaProximoNivel(100) {
+    : nome(n), pontosVida(pv), pontosVidaMax(pv), forca(f), defesa(d), elementoNato(el), nivel(1), xp(0), xpParaProximoNivel(50) {
 
     estaDefendendo = false;
 }
@@ -11,6 +11,7 @@ bool Personagem::verificarCritico() {
     return (rand() % 100) < 20; // 20% de chance
 }
 
+//CalcularDano
 void Personagem::receberDano(int dano) {
 
     if (estaDefendendo) {
@@ -33,14 +34,16 @@ int Personagem::reduzirDanoPelaDefesa(int danoBase) {
 void Personagem::ganharXP(int xpRecebido) {
     if (xpRecebido <= 0) return;
     xp += xpRecebido;
-    cout << "   [XP] " << nome << " ganhou " << xpRecebido << " XP!\n";
+    cout << "   [XP] " << nome << " ganhou " << xpRecebido << " XP! (Agora: " << xp << "/" << xpParaProximoNivel << ")\n";
     while (xp >= xpParaProximoNivel) {
         xp -= xpParaProximoNivel;
         nivel++;
         xpParaProximoNivel = (int)(xpParaProximoNivel * 1.5);
         subirNivel();
+        cout << "   [INFO] XP restante: " << xp << " | Proximo nivel em: " << xpParaProximoNivel << "\n";
     }
 }
+
 
 void Personagem::subirNivel() {
     int ganhoPV = 10;
@@ -52,8 +55,11 @@ void Personagem::subirNivel() {
 }
 
 void Personagem::mostrarStatus() {
+    // no Personagem::mostrarStatus()
     cout << "STATUS: " << nome << " [" << elementoNato << "] | HP: " << pontosVida << "/" << pontosVidaMax
-        << " | ATK: " << forca << " | DEF: " << defesa << " | LVL: " << nivel << "\n";
+        << " | ATK: " << forca << " | DEF: " << defesa << " | LVL: " << nivel
+        << " | XP: " << xp << "/" << xpParaProximoNivel << "\n";
+
 }
 
 void Personagem::adicionarHabilidade(Habilidade h) {
