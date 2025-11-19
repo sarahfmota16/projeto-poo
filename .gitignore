@@ -1,9 +1,16 @@
-.vs/
-.vs
-bin/
-obj/
-*.user
-*.suo
-*.cache
+# Visual Studio build files
+*.obj
+*.pdb
+*.idb
+*.ilk
+*.exe
+*.tlog
 *.log
-*.vsidx
+*.cache
+*.db
+
+# Build folders
+x64/
+Debug/
+Release/
+PROJETO POO/
