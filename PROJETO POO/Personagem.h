@@ -22,6 +22,8 @@ protected:
     int xp;
     int xpParaProximoNivel;
 
+    bool estaDefendendo;
+
 public:
     vector<Habilidade> habilidades;
 
@@ -46,6 +48,10 @@ public:
     virtual void subirNivel();
     void mostrarStatus();
     void adicionarHabilidade(Habilidade h);
+
+    void defender();
+    void limparDefesa();
+
 };
 
 class Guerreiro : public Personagem {

@@ -3,6 +3,8 @@
 
 Personagem::Personagem(string n, int pv, int f, int d, string el)
     : nome(n), pontosVida(pv), pontosVidaMax(pv), forca(f), defesa(d), elementoNato(el), nivel(1), xp(0), xpParaProximoNivel(100) {
+
+    estaDefendendo = false;
 }
 
 bool Personagem::verificarCritico() {
@@ -10,9 +12,17 @@ bool Personagem::verificarCritico() {
 }
 
 void Personagem::receberDano(int dano) {
+
+    if (estaDefendendo) {
+        dano /= 2;
+        cout << "   [DEFESA] O dano foi reduzido para " << dano << "!\n";
+        estaDefendendo = false; // defesa só vale 1 ataque
+    }
+
     pontosVida -= dano;
     if (pontosVida < 0) pontosVida = 0;
 }
+
 
 int Personagem::reduzirDanoPelaDefesa(int danoBase) {
     float multiplicador = 100.0f / (100.0f + defesa);
@@ -38,7 +48,7 @@ void Personagem::subirNivel() {
     pontosVida = pontosVidaMax;
     forca += 2;
     defesa += 1;
-    cout << "   >>> LEVEL UP! " << nome << " alcançou o nivel " << nivel << "! <<<\n";
+    cout << "   >>> LEVEL UP! " << nome << " alcancou o nivel " << nivel << "! <<<\n";
 }
 
 void Personagem::mostrarStatus() {
@@ -48,4 +58,13 @@ void Personagem::mostrarStatus() {
 
 void Personagem::adicionarHabilidade(Habilidade h) {
     habilidades.push_back(h);
+}
+
+void Personagem::defender() {
+    estaDefendendo = true;
+    cout << nome << " esta em posicao de defesa! (Dano recebido reduzido pela metade)\n";
+}
+
+void Personagem::limparDefesa() {
+    estaDefendendo = false;
 }

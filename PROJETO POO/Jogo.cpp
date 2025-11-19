@@ -7,44 +7,85 @@
 
 using namespace std;
 
+// Cores ANSI
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define CYAN    "\033[36m"
+#define MAGENTA "\033[35m"
+#define BOLD    "\033[1m"
+
 void Jogo::iniciar() {
     srand(time(0));
 
-    cout << "Bem-vindo ao RPG de Turno no Terminal!\n";
-    cout << "Escolha sua classe:\n1. Guerreiro\n2. Mago\n3. Arqueiro\nOpcao: ";
+    cout << CYAN << "\n==============================================\n" << RESET;
+    cout << BOLD << "           BEM-VINDO AO RPG DE TURNO!\n" << RESET;
+    cout << CYAN << "==============================================\n\n" << RESET;
+
+    cout << YELLOW << "Escolha sua classe:\n" << RESET;
+    cout << "1. " << GREEN << "Guerreiro" << RESET << "\n";
+    cout << "2. " << MAGENTA << "Mago" << RESET << "\n";
+    cout << "3. " << CYAN << "Arqueiro" << RESET << "\n";
+    cout << YELLOW << "Opcao: " << RESET;
 
     int classe;
     cin >> classe;
 
     Personagem* jogador = nullptr;
 
-    if (classe == 1) jogador = new Guerreiro("Arthur", 120, 20, 10, 5);
+    cout << "\n";
+
+    if (classe == 1) {
+        cout << GREEN << ">> Voce escolheu o caminho do GUERREIRO!\n\n" << RESET;
+        jogador = new Guerreiro("Arthur", 120, 20, 10, 5);
+    }
     else if (classe == 2) {
+        cout << MAGENTA << ">> Voce escolheu o caminho do MAGO!\n\n" << RESET;
         jogador = new Mago("Merlin", 80, 10, 5, 40);
         jogador->adicionarHabilidade(Habilidade("Bola de Fogo", "Fogo", 35));
     }
-    else jogador = new Arqueiro("Legolas", 100, 15, 8, 10);
+    else {
+        cout << CYAN << ">> Voce escolheu o caminho do ARQUEIRO!\n\n" << RESET;
+        jogador = new Arqueiro("Legolas", 100, 15, 8, 10);
+    }
 
     // Lista de inimigos
-    vector<Inimigo*> inimigos;
-    inimigos.push_back(new Inimigo("Goblin", "Monstro", "Terra", 50, 10, 2, 30));
-    inimigos.push_back(new Inimigo("Orc", "Monstro", "Terra", 80, 15, 5, 60));
-    inimigos.push_back(new Inimigo("Dragao de Gelo", "Chefe", "Gelo", 200, 25, 10, 500));
+    vector<Inimigo*> inimigos = {
+        new Inimigo("Goblin", "Monstro", "Terra", 50, 10, 2, 30),
+        new Inimigo("Orc", "Monstro", "Terra", 80, 15, 5, 60),
+        new Inimigo("Dragao de Gelo", "Chefe", "Gelo", 200, 25, 10, 500)
+    };
 
     // Loop principal
     for (Inimigo* inimigo : inimigos) {
         if (!jogador->estaVivo()) break;
 
+        cout << CYAN << "\n==============================================\n" << RESET;
+        cout << BOLD << "           NOVO INIMIGO NO CAMINHO!\n" << RESET;
+        cout << CYAN << "==============================================\n" << RESET;
+
         bool vitoria = Batalha::iniciarCombate(*jogador, *inimigo);
+
+        // Caso derrota
         if (!vitoria && !jogador->estaVivo()) break;
 
+        // Vitória — pausa antes do próximo inimigo
         if (vitoria) {
-            cout << "\nPressione 1 para continuar para a proxima batalha: ";
-            int dummy; cin >> dummy;
+            cout << GREEN << "\n>> Voce venceu esta batalha!\n" << RESET;
+            cout << YELLOW << "Digite 1 para seguir para a proxima luta: " << RESET;
+
+            int temp;
+            cin >> temp;
+
+            cout << "\n";
         }
     }
 
-    cout << "\nFim de jogo. Obrigado por jogar!\n";
+    cout << RED << "\n==============================================\n" << RESET;
+    cout << BOLD << "                 FIM DE JOGO\n" << RESET;
+    cout << RED << "==============================================\n" << RESET;
+    cout << CYAN << "Obrigado por jogar!\n\n" << RESET;
 
     // Libera memória
     delete jogador;
