@@ -13,10 +13,9 @@
 
 bool Batalha::iniciarCombate(Personagem& heroi, Inimigo& inimigo) {
 
-    cout << CYAN << "\n==============================================\n" << RESET;
-    cout << BOLD << "        !!! INIMIGO ENCONTRADO !!!\n" << RESET;
-    cout << MAGENTA << "              " << inimigo.getNome() << "\n" << RESET;
-    cout << CYAN << "==============================================\n" << RESET;
+    cout << CYAN << "\n======================================\n" << RESET;
+    cout << BOLD << "   INIMIGO ENCONTRADO, PREPARE-SE... \n" << RESET;
+    cout << CYAN << "======================================\n" << RESET;
 
     int rodada = 1;
 
