@@ -20,7 +20,7 @@ int Guerreiro::atacar(Personagem& alvo) {
     // chance de crítico
     if (verificarCritico()) {
         danoBase = (int)(danoBase * 1.5);
-        cout << "   ⚔️  (CRITICO!) Golpe devastador!\n";
+        cout << "    (CRITICO!) Golpe devastador!\n";
     }
 
     int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);

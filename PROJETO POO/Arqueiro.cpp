@@ -17,7 +17,7 @@ int Arqueiro::atacar(Personagem& alvo) {
 
     if (verificarCritico()) {
         danoBase = (int)(danoBase * 1.8); // arqueiros critam mais forte
-        cout << "   🎯 (HEADSHOT!) Critico mortal!\n";
+        cout << "    (HEADSHOT!) Critico mortal!\n";
     }
 
     int danoFinal = alvo.reduzirDanoPelaDefesa(danoBase);
